@@ -1,0 +1,54 @@
+name: Build Windows
+
+on:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write   # nécessaire pour publier une Release lors d'un tag
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Rust (stable, cible MSVC)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Tests
+        run: cargo test --release --target x86_64-pc-windows-msvc
+
+      - name: Compilation (release)
+        run: cargo build --release --target x86_64-pc-windows-msvc
+
+      - name: Préparation de l'artefact
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item "target/x86_64-pc-windows-msvc/release/kimbo-placement.exe" "dist/kimbo-placement.exe"
+
+      - name: Publication de l'artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kimbo-placement-windows-x64
+          path: dist/kimbo-placement.exe
+          if-no-files-found: error
+
+      - name: Publication dans une Release (tags v*)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/kimbo-placement.exe
