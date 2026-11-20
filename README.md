@@ -1,6 +1,6 @@
 # Kimbo – Placement (Windows, Rust)
 
-Assistant de placement pour la Canopée du Kimbo (Dofus), version native Windows.
+Assistant pour donjons Dofus, version native Windows : onglet **Kimbo** (placement selon les couleurs de case) et onglet **Tengu Givrefoux** (étapes du combat + compteur des 4 tours de vulnérabilité).
 
 - Interface : egui / eframe, rendu **wgpu** : DirectX 12, repli automatique sur OpenGL
 - Fenêtre **toujours au-dessus** des autres applications

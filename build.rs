@@ -5,8 +5,8 @@ fn main() {
     {
         let mut res = winresource::WindowsResource::new();
         res.set_icon("assets/icon.ico");
-        res.set("ProductName", "Kimbo - Placement");
-        res.set("FileDescription", "Assistant de placement - Canopée du Kimbo");
+        res.set("ProductName", "Assistant donjons");
+        res.set("FileDescription", "Assistant donjons - Kimbo et Tengu Givrefoux");
         if let Err(e) = res.compile() {
             eprintln!("Impossible d'intégrer l'icône : {e}");
             std::process::exit(1);
